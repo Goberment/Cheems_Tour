@@ -6,19 +6,152 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:gravity="center_horizontal"
+    android:background="#0C1220"
+    android:padding="24dp"
     tools:context=".MainActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="end"
+        android:layout_marginBottom="8dp">
+
+        <Button
+            android:id="@+id/btnLanguage"
+            android:layout_width="wrap_content"
+            android:layout_height="36dp"
+            android:text="@string/Spanish_English"
+            android:textSize="12sp"
+            android:textColor="#B0B8CC"
+            android:backgroundTint="#1A2436"
+            android:paddingStart="14dp"
+            android:paddingEnd="14dp"
+            android:minWidth="0dp"
+            android:minHeight="0dp"
+            android:stateListAnimator="@null"
+            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+            app:strokeColor="#2A3A54"
+            app:strokeWidth="1dp"/>
+
+
+    </LinearLayout>
+
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        />
+
+
+    <ImageView
+        android:id="@+id/imgLogo"
+        android:layout_width="250dp"
+        android:layout_height="200dp"
+        android:padding="12dp"
+        android:scaleType="fitCenter"
+        android:src="@drawable/logo" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="AeroForest"
+        android:textSize="26sp"
+        android:textStyle="bold"
+        android:textColor="#FFFFFF"
+        android:layout_marginTop="16dp"
+        android:letterSpacing="0.03" />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/Weather"
+        android:textSize="13sp"
+        android:textColor="@color/white"
+        android:layout_marginTop="4dp" />
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1" />
+
 
     <Button
         android:id="@+id/btnTripMap"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/view_map"/>
-
+        android:layout_width="match_parent"
+        android:layout_height="54dp"
+        android:text="@string/view_map"
+        android:textSize="15sp"
+        android:textColor="#0C1220"
+        android:backgroundTint="#EDEFFA"
+        android:layout_marginBottom="12dp"
+        android:stateListAnimator="@null"
+        android:textStyle="bold"
+        style="@style/Widget.MaterialComponents.Button.OutlinedButton" />
     <Button
         android:id="@+id/btnTripForm"
+        android:layout_width="match_parent"
+        android:layout_height="54dp"
+        android:text="@string/form_map"
+        android:textSize="15sp"
+        android:textColor="#8A9AB8"
+        android:backgroundTint="#141E30"
+        android:layout_marginBottom="28dp"
+        android:stateListAnimator="@null"
+        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+        app:strokeColor="#2A3A54"
+        app:strokeWidth="1dp"
+        />
+
+    <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/form_map" />
+        android:text="@string/Language"
+        android:textSize="11sp"
+        android:textColor="#3A4A62"
+        android:layout_marginBottom="12dp"
+        android:letterSpacing="0.1" />
 
+    <RadioGroup
+        android:id="@+id/rgLanguage"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center">
+
+        <RadioButton
+            android:id="@+id/rbEnglish"
+            android:layout_width="0dp"
+            android:layout_height="42dp"
+            android:layout_weight="1"
+            android:text="@string/English"
+            android:textSize="12sp"
+            android:textColor="#FFFFFF"
+            android:buttonTint="#0C1220"
+            android:gravity="center"
+            android:checked="true"
+            android:layout_marginEnd="6dp" />
+
+        <RadioButton
+            android:id="@+id/rbSpanish"
+            android:layout_width="0dp"
+            android:layout_height="42dp"
+            android:layout_weight="1"
+            android:text="@string/Spanish"
+            android:textSize="12sp"
+            android:textColor="#5A6A85"
+            android:buttonTint="#0C1220"
+            android:gravity="center"
+            android:layout_marginStart="6dp" />
+
+    </RadioGroup>
+
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1" />
 
 </LinearLayout>
+
+
+
+
+
