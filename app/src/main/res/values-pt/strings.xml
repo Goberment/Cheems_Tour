@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Cheems_Tour</string>
+    <string name="view_map">Ver Mapa</string>
+    <string name="form_name">Nome</string>
+    <string name="form_city">Cidade</string>
+    <string name="form_save">Guardar</string>
+    <string name="form_map">Adicionar Local da Viagem</string>
+</resources>

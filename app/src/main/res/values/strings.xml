@@ -1,8 +1,8 @@
 <resources>
     <string name="app_name">Cheems_Tour</string>
     <string name="view_map">View Map</string>
-    <string name="form_name">name</string>
+    <string name="form_name">Name</string>
     <string name="form_city">City</string>
-    <string name="form_save">save</string>
-    <string name="form_map">Add trip locaction</string>
+    <string name="form_save">Save</string>
+    <string name="form_map">Add Trip locaction</string>
 </resources>
