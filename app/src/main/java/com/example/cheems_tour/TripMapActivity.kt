@@ -1,5 +1,6 @@
 package com.example.cheems_tour
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import androidx.activity.enableEdgeToEdge
@@ -35,7 +36,7 @@ class TripMapActivity : AppCompatActivity(), OnMapReadyCallback {
         mapFragment.getMapAsync(this)
         getTrips()
     }
-    fun  getTrips(){
+    fun getTrips(){
         val call : Call<List<Trip>> = RetrofitUtil.getApi().getTrips()
         call.enqueue(object : Callback<List<Trip>> {
             override fun onResponse(
@@ -44,9 +45,10 @@ class TripMapActivity : AppCompatActivity(), OnMapReadyCallback {
             ) {
                 val trips: List<Trip> = response.body()!!
                 trips.forEach { t ->
-                val latLng = LatLng(t.latitude, t.longitude)
-                    map?.addMarker(MarkerOptions().position(latLng).title(t.name).icon(
-                        BitmapDescriptorFactory.fromResource(R.drawable.cheems  )))
+                    val latLng = LatLng(t.latitude, t.longitude)
+                    val marker = map?.addMarker(MarkerOptions().position(latLng).title(t.name).icon(
+                        BitmapDescriptorFactory.fromResource(R.drawable.cheems)))
+                    marker?.tag = t
                 }
             }
             override fun onFailure(call: Call<List<Trip>>, t: Throwable) {
@@ -59,6 +61,12 @@ class TripMapActivity : AppCompatActivity(), OnMapReadyCallback {
           try {
               map = googleMap
               map!!.mapType = GoogleMap.MAP_TYPE_NORMAL
+              map?.setOnInfoWindowClickListener { marker ->
+                  val trip = marker.tag as Trip
+                  val intent = Intent(this, TripFormActivity::class.java)
+                  intent.putExtra("trip", trip)
+                  startActivity(intent)
+              }
 
           }catch (ex: Exception){
               Log.e("Error loading map", ex.message.toString())

@@ -45,6 +45,11 @@ class TripFormActivity : AppCompatActivity(), View.OnClickListener, OnMapReadyCa
         city = findViewById(R.id.txt_city)
         btnsave = findViewById(R.id.btn_save)
         btnsave.setOnClickListener(this)
+        val trip = intent.getSerializableExtra("trip") as Trip?
+        if (trip != null) {
+            name.setText(trip.name)
+            city.setText(trip.city)
+        }
 
         val mapFragment = supportFragmentManager.findFragmentById(R.id.map_form) as SupportMapFragment
         mapFragment.getMapAsync(this)
@@ -79,6 +84,7 @@ class TripFormActivity : AppCompatActivity(), View.OnClickListener, OnMapReadyCa
             map = googleMap
             map!!.mapType = GoogleMap.MAP_TYPE_HYBRID
             map?.clear()
+
 
             val latLng = LatLng(0.0, 0.0)
 
