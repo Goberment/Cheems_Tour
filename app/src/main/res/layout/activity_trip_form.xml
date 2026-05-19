@@ -89,4 +89,17 @@
         android:stateListAnimator="@null"
         style="@style/Widget.MaterialComponents.Button" />
 
+    <Button
+        android:id="@+id/btn_delete"
+        android:layout_width="match_parent"
+        android:layout_height="54dp"
+        android:text="Delete"
+        android:textSize="15sp"
+        android:textColor="#FFFFFF"
+        android:textStyle="bold"
+        android:backgroundTint="#C0392B"
+        android:stateListAnimator="@null"
+        android:layout_marginTop="12dp"
+        style="@style/Widget.MaterialComponents.Button" />
+
 </LinearLayout>

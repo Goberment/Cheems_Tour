@@ -25,7 +25,9 @@ import retrofit2.Response
 class TripFormActivity : AppCompatActivity(), View.OnClickListener, OnMapReadyCallback {
 
     var map: GoogleMap? = null
+    var tripId: Int? = null
     lateinit var btnsave: Button
+    lateinit var btndelete: Button
     lateinit var name: EditText
     lateinit var city: EditText
     var latitude: Double = 0.0
@@ -45,38 +47,18 @@ class TripFormActivity : AppCompatActivity(), View.OnClickListener, OnMapReadyCa
         city = findViewById(R.id.txt_city)
         btnsave = findViewById(R.id.btn_save)
         btnsave.setOnClickListener(this)
+        btndelete = findViewById(R.id.btn_delete)
+        btndelete.setOnClickListener(this)
+
         val trip = intent.getSerializableExtra("trip") as Trip?
         if (trip != null) {
+            tripId = trip.id
             name.setText(trip.name)
             city.setText(trip.city)
         }
 
         val mapFragment = supportFragmentManager.findFragmentById(R.id.map_form) as SupportMapFragment
         mapFragment.getMapAsync(this)
-    }
-
-    override fun onClick(v: View?) {
-        val tripName = name.text.toString()
-        val tripCity = city.text.toString()
-
-        Log.d("DEBUG", "name: $tripName, city: $tripCity, lat: $latitude, lon: $longitude")
-
-        if (tripName.isEmpty() || tripCity.isEmpty()) return
-
-        val trip = Trip(name = tripName, city = tripCity, latitude = latitude, longitude = longitude)
-
-        val call = RetrofitUtil.getApi().createTrip(trip)
-        call.enqueue(object : Callback<Void> {
-            override fun onResponse(call: Call<Void>, response: Response<Void>) {
-                Log.d("DEBUG", "code: ${response.code()}")
-                if (response.isSuccessful) {
-                    finish()
-                }
-            }
-            override fun onFailure(call: Call<Void>, t: Throwable) {
-                Log.e("Error", t.message.toString())
-            }
-        })
     }
 
     override fun onMapReady(googleMap: GoogleMap) {
@@ -108,6 +90,50 @@ class TripFormActivity : AppCompatActivity(), View.OnClickListener, OnMapReadyCa
 
         } catch (ex: Exception) {
             Log.e("Error loading map", "Error")
+        }
+    }
+
+    override fun onClick(v: View?) {
+        val tripName = name.text.toString()
+        val tripCity = city.text.toString()
+
+        when(v?.id) {
+            R.id.btn_delete -> {
+                val call = RetrofitUtil.getApi().deleteTrip(tripId!!)
+                call.enqueue(object : Callback<Void> {
+                    override fun onResponse(call: Call<Void>, response: Response<Void>) {
+                        if (response.isSuccessful) finish()
+                    }
+                    override fun onFailure(call: Call<Void>, t: Throwable) {
+                        Log.e("Error", t.message.toString())
+                    }
+                })
+            }
+            R.id.btn_save -> {
+                if (tripName.isEmpty() || tripCity.isEmpty()) return
+                val trip = Trip(name = tripName, city = tripCity, latitude = latitude, longitude = longitude)
+                if (tripId != null) {
+                    val call = RetrofitUtil.getApi().updateTrip(tripId!!, trip)
+                    call.enqueue(object : Callback<Void> {
+                        override fun onResponse(call: Call<Void>, response: Response<Void>) {
+                            if (response.isSuccessful) finish()
+                        }
+                        override fun onFailure(call: Call<Void>, t: Throwable) {
+                            Log.e("Error", t.message.toString())
+                        }
+                    })
+                } else {
+                    val call = RetrofitUtil.getApi().createTrip(trip)
+                    call.enqueue(object : Callback<Void> {
+                        override fun onResponse(call: Call<Void>, response: Response<Void>) {
+                            if (response.isSuccessful) finish()
+                        }
+                        override fun onFailure(call: Call<Void>, t: Throwable) {
+                            Log.e("Error", t.message.toString())
+                        }
+                    })
+                }
+            }
         }
     }
 }

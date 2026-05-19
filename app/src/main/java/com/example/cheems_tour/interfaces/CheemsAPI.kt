@@ -22,12 +22,11 @@ interface CheemsAPI {
     @POST("trip")
     fun createTrip(@Body trip: Trip): Call<Void>
 
-        @PUT("trip/{id}")
-        fun updateTrip(@Path("id") id: Int, @Body trip: Trip): Call<Map<String, Boolean>>
+    @PUT("trip/{id}")
+    fun updateTrip(@Path("id") id: Int, @Body trip: Trip): Call<Void>
 
-        @DELETE("trip/{id}")
-        fun deleteTrip(@Path("id") id: Int): Call<Map<String, Boolean>>
-
+    @DELETE("trip/{id}")
+    fun deleteTrip(@Path("id") id: Int): Call<Void>
 
 
 
