@@ -15,6 +15,7 @@ import com.example.cheems_tour.utils.RetrofitUtil
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import android.widget.RadioButton
 
 class MainActivity : AppCompatActivity(), View.OnClickListener {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -30,6 +31,28 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         btnTripMap.setOnClickListener(this)
         val btnTripForm = findViewById<View>(R.id.btnTripForm) as Button
         btnTripForm.setOnClickListener(this)
+
+        // ---- NUEVO ----
+        val rbEnglish = findViewById<RadioButton>(R.id.rbEnglish)
+        val rbSpanish = findViewById<RadioButton>(R.id.rbSpanish)
+
+        val currentLang = getSharedPreferences("settings", MODE_PRIVATE)
+            .getString("lang", "en") ?: "en"
+        if (currentLang == "es") rbSpanish.isChecked = true
+        else rbEnglish.isChecked = true
+
+        rbEnglish.setOnClickListener {
+            getSharedPreferences("settings", MODE_PRIVATE).edit()
+                .putString("lang", "en").apply()
+            recreate()
+        }
+
+        rbSpanish.setOnClickListener {
+            getSharedPreferences("settings", MODE_PRIVATE).edit()
+                .putString("lang", "es").apply()
+            recreate()
+        }
+        // ---- FIN NUEVO ----
 
     }
 
@@ -59,8 +82,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
             R.id.btnTripForm -> {
                 val intentMap = Intent(this, TripFormActivity::class.java)
                 startActivity(intentMap)
-        }
-
+            }
         }
     }
 }
