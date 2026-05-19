@@ -11,7 +11,7 @@ object RetrofitUtil {
         val gson = GsonBuilder().create()
 
         val retrofit = Retrofit.Builder()
-            .baseUrl("http://10.232.27.33:5000")
+            .baseUrl(("http://10.0.2.2:5000/"))
             .addConverterFactory(GsonConverterFactory.create(gson))
             .build()
 

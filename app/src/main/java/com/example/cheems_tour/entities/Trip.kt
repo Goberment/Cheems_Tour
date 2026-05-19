@@ -1,11 +1,14 @@
 package com.example.cheems_tour.entities
 
-class Trip {
-    constructor(id: Int, name: String,
-        city: String, latitude: Double,
-        longitude: Double){
+import java.io.Serializable
 
-
+class Trip : Serializable {
+    constructor(id: Int? = null, name: String = "", city: String = "", latitude: Double = 0.0, longitude: Double = 0.0) {
+        this.id = id
+        this.name = name
+        this.city = city
+        this.latitude = latitude
+        this.longitude = longitude
     }
 
     var id: Int? = null

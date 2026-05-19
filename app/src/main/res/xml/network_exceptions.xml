@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <network-security-config>
-    <domain-config  cleartextTrafficPermitted="true">
-        <domain includeSubdomains="true">http://10.232.12.151:5000</domain>
+    <domain-config cleartextTrafficPermitted="true">
+        <domain includeSubdomains="true">10.232.27.33</domain>
+        <domain includeSubdomains="true">10.0.2.2</domain>
     </domain-config>
 </network-security-config>
