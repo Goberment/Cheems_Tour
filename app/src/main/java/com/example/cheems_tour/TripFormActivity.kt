@@ -21,6 +21,7 @@ import com.google.android.gms.maps.model.MarkerOptions
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import android.widget.Toast
 
 class TripFormActivity : AppCompatActivity(), View.OnClickListener, OnMapReadyCallback {
 
@@ -102,34 +103,49 @@ class TripFormActivity : AppCompatActivity(), View.OnClickListener, OnMapReadyCa
                 val call = RetrofitUtil.getApi().deleteTrip(tripId!!)
                 call.enqueue(object : Callback<Void> {
                     override fun onResponse(call: Call<Void>, response: Response<Void>) {
-                        if (response.isSuccessful) finish()
+                        if (response.isSuccessful) {
+                            Toast.makeText(this@TripFormActivity, "Trip Elimnado", Toast.LENGTH_SHORT).show()
+                            finish()
+                        }
                     }
                     override fun onFailure(call: Call<Void>, t: Throwable) {
                         Log.e("Error", t.message.toString())
+                        Toast.makeText(this@TripFormActivity, "Error al Eliminar", Toast.LENGTH_SHORT).show()
                     }
                 })
             }
             R.id.btn_save -> {
-                if (tripName.isEmpty() || tripCity.isEmpty()) return
+                if (tripName.isEmpty() || tripCity.isEmpty()) {
+                    Toast.makeText(this, "Llena todos los campos", Toast.LENGTH_SHORT).show()
+                    return
+                }
                 val trip = Trip(name = tripName, city = tripCity, latitude = latitude, longitude = longitude)
                 if (tripId != null) {
                     val call = RetrofitUtil.getApi().updateTrip(tripId!!, trip)
                     call.enqueue(object : Callback<Void> {
                         override fun onResponse(call: Call<Void>, response: Response<Void>) {
-                            if (response.isSuccessful) finish()
+                            if (response.isSuccessful) {
+                                Toast.makeText(this@TripFormActivity, "Trip actualizado", Toast.LENGTH_SHORT).show()
+                                finish()
+                            }
                         }
                         override fun onFailure(call: Call<Void>, t: Throwable) {
                             Log.e("Error", t.message.toString())
+                            Toast.makeText(this@TripFormActivity, "Error al actualizar", Toast.LENGTH_SHORT).show()
                         }
                     })
                 } else {
                     val call = RetrofitUtil.getApi().createTrip(trip)
                     call.enqueue(object : Callback<Void> {
                         override fun onResponse(call: Call<Void>, response: Response<Void>) {
-                            if (response.isSuccessful) finish()
+                            if (response.isSuccessful) {
+                                Toast.makeText(this@TripFormActivity, "Trip guardado", Toast.LENGTH_SHORT).show()
+                                finish()
+                            }
                         }
                         override fun onFailure(call: Call<Void>, t: Throwable) {
                             Log.e("Error", t.message.toString())
+                            Toast.makeText(this@TripFormActivity, "Error al guardar", Toast.LENGTH_SHORT).show()
                         }
                     })
                 }

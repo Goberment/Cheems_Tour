@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Cheems_Tour</string>
+    <string name="view_map">Ver Mapa</string>
+    <string name="form_name">Nome</string>
+    <string name="form_city">Cidade</string>
+    <string name="form_save">Guardar</string>
+    <string name="form_map">Adicionar localização</string>
+    <string name="Weather">O clime na sua zona em tempo real</string>
+    <string name="English">Inglês</string>
+    <string name="Spanish">Espanhol</string>
+    <string name="Portuguese">🇧🇷 Portuguese</string>
+    <string name="Language">Idioma</string>
+    <string name="Spanish_English">🌐 ES / IN</string>
+</resources>

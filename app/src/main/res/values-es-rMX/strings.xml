@@ -8,6 +8,7 @@
     <string name="Weather">Tu clima en tiempo real</string>
     <string name="English">us Inglés</string>
     <string name="Spanish">mx Español</string>
+    <string name="Portuguese">🇧🇷 Portugués</string>
     <string name="Language">Idioma</string>
     <string name="Spanish_English">🌐 ES / EN</string>
 </resources>

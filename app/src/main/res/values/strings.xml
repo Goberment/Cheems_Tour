@@ -8,6 +8,7 @@
     <string name="Weather">Your real-time weather</string>
     <string name="English">🇺🇸 English</string>
     <string name="Spanish">mx Español</string>
+    <string name="Portuguese">🇧🇷 Portuguese</string>
     <string name="Language">Language</string>
     <string name="Spanish_English">🌐 ES / EN</string>
 </resources>

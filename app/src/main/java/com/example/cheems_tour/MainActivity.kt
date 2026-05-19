@@ -35,23 +35,19 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         // ---- NUEVO ----
         val rbEnglish = findViewById<RadioButton>(R.id.rbEnglish)
         val rbSpanish = findViewById<RadioButton>(R.id.rbSpanish)
+        val rbPortuguese = findViewById<RadioButton>(R.id.rbPortuguese)
 
         val currentLang = getSharedPreferences("settings", MODE_PRIVATE)
             .getString("lang", "en") ?: "en"
-        if (currentLang == "es") rbSpanish.isChecked = true
-        else rbEnglish.isChecked = true
-
-        rbEnglish.setOnClickListener {
-            getSharedPreferences("settings", MODE_PRIVATE).edit()
-                .putString("lang", "en").apply()
-            recreate()
+        when (currentLang) {
+            "es" -> rbSpanish.isChecked = true
+            "pt" -> rbPortuguese.isChecked = true
+            else -> rbEnglish.isChecked = true
         }
 
-        rbSpanish.setOnClickListener {
-            getSharedPreferences("settings", MODE_PRIVATE).edit()
-                .putString("lang", "es").apply()
-            recreate()
-        }
+        rbEnglish.setOnClickListener { setLocale("en") }
+        rbSpanish.setOnClickListener { setLocale("es") }
+        rbPortuguese.setOnClickListener { setLocale("pt") }
         // ---- FIN NUEVO ----
 
     }
@@ -71,6 +67,17 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
                 Log.e("Error calling API", t.message.toString())
             }
         })
+    }
+
+    private fun setLocale(lang: String) {
+        getSharedPreferences("settings", MODE_PRIVATE).edit()
+            .putString("lang", lang).apply()
+        val locale = java.util.Locale(lang)
+        java.util.Locale.setDefault(locale)
+        val config = android.content.res.Configuration(resources.configuration)
+        config.setLocale(locale)
+        resources.updateConfiguration(config, resources.displayMetrics)
+        recreate()
     }
 
     override fun onClick(view: View) {

@@ -21,16 +21,29 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import com.example.cheems_tour.entities.Weather
+import android.os.Build
+import android.os.VibrationEffect
+import android.os.Vibrator
+import android.os.VibratorManager
 
 class TripMapActivity : AppCompatActivity(), OnMapReadyCallback {
 
     var map : GoogleMap? = null
     val markerTripMap = mutableMapOf<Marker, Trip>()
 
+    private lateinit var vibrator: Vibrator
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContentView(R.layout.activity_trip_map)
+        vibrator = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            val vm = getSystemService(VIBRATOR_MANAGER_SERVICE) as VibratorManager
+            vm.defaultVibrator
+        } else {
+            @Suppress("DEPRECATION")
+            getSystemService(VIBRATOR_SERVICE) as Vibrator
+        }
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
@@ -92,12 +105,22 @@ class TripMapActivity : AppCompatActivity(), OnMapReadyCallback {
         })
     }
 
+    private fun vibrate(durationMs: Long) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            vibrator.vibrate(VibrationEffect.createOneShot(durationMs, VibrationEffect.DEFAULT_AMPLITUDE))
+        } else {
+            @Suppress("DEPRECATION")
+            vibrator.vibrate(durationMs)
+        }
+    }
+
     override fun onMapReady(googleMap: GoogleMap) {
         try {
             map = googleMap
             map!!.mapType = GoogleMap.MAP_TYPE_NORMAL
 
             map!!.setOnMarkerClickListener { marker ->
+                vibrate(40)
                 val trip = markerTripMap[marker]
                 if (trip != null) {
                     getWeather(trip.latitude, trip.longitude, trip.name ?: "")
@@ -107,6 +130,7 @@ class TripMapActivity : AppCompatActivity(), OnMapReadyCallback {
             }
 
             map!!.setOnInfoWindowClickListener { marker ->
+                vibrate(40)
                 val trip = markerTripMap[marker]
                 if (trip != null) {
                     val intent = Intent(this, TripFormActivity::class.java)
