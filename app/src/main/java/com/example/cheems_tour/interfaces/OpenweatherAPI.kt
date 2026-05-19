@@ -12,3 +12,8 @@ interface OpenweatherAPI {
                    @Query("lon") lon: Double,
                    @Query("appid") appId: String): Call<Weather>
 }
+
+//Interfaz Retrofit para la API pública de OpenWeatherMap.
+// Define un único endpoint para consultar el clima por coordenadas.
+//GET	/Weather	Consulta el clima por coordenadas. Parámetros @Query:
+// lat (Double), lon (Double), appid (String — API key).

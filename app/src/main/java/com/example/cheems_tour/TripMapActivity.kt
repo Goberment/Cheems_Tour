@@ -19,9 +19,15 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
+
+
+//Activity que muestra un Google Map de tipo NORMAL con todos los viajes cargados desde la API.
+// Cada viaje se representa con un marker personalizado (imagen de Cheems).
+// Al tocar la ventana de información de un marker, abre TripFormActivity pasando el viaje seleccionado para su edición.
 class TripMapActivity : AppCompatActivity(), OnMapReadyCallback {
 
     var map : GoogleMap? = null
+    //Referencia al objeto GoogleMap una vez que el mapa esté listo. Nullable porque se inicializa de forma asíncrona.
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -36,6 +42,14 @@ class TripMapActivity : AppCompatActivity(), OnMapReadyCallback {
         mapFragment.getMapAsync(this)
         getTrips()
     }
+
+    //•	Infla el layout activity_trip_map (que solo contiene un SupportMapFragment a pantalla completa).
+    //•	Aplica insets de ventana.
+    //•	Obtiene la referencia al SupportMapFragment y llama a getMapAsync(this) para inicializar el mapa de forma asíncrona.
+    //•	Llama a getTrips() para iniciar la descarga de viajes (puede ejecutarse antes de que el mapa esté listo;
+    // los markers se añaden en onMapReady o cuando ambos datos estén disponibles).
+
+
     fun getTrips(){
         val call : Call<List<Trip>> = RetrofitUtil.getApi().getTrips()
         call.enqueue(object : Callback<List<Trip>> {
@@ -57,6 +71,15 @@ class TripMapActivity : AppCompatActivity(), OnMapReadyCallback {
         })
     }
 
+    //Método: getTrips()
+    //Realiza una llamada GET /trips a la CheemsAPI. Al recibir la lista de viajes:
+    //•	Itera sobre cada Trip.
+    //•	Crea un LatLng con la latitud y longitud del viaje.
+    //•	Añade un marker en el mapa con la imagen R.drawable.cheems como ícono personalizado
+    // (usando BitmapDescriptorFactory.fromResource).
+    //•	Guarda el objeto Trip en marker.tag para recuperarlo al hacer clic.
+
+
     override fun onMapReady(googleMap: GoogleMap) {
           try {
               map = googleMap
@@ -73,4 +96,9 @@ class TripMapActivity : AppCompatActivity(), OnMapReadyCallback {
           }
     }
 
+    //Callback que se invoca cuando el mapa está completamente inicializado:
+    //•	Asigna el googleMap recibido a la propiedad map.
+    //•	Configura el tipo de mapa como MAP_TYPE_NORMAL.
+    //•	Registra un OnInfoWindowClickListener: cuando el usuario pulsa en la ventana de info de un marker,
+// extrae el Trip guardado en marker.tag, crea un Intent hacia TripFormActivity con el Trip
 }
