@@ -1,5 +1,6 @@
 package com.example.cheems_tour
 
+import android.Manifest
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -25,10 +26,11 @@ import android.os.Build
 import android.os.VibrationEffect
 import android.os.Vibrator
 import android.os.VibratorManager
+import androidx.annotation.RequiresPermission
 
 class TripMapActivity : AppCompatActivity(), OnMapReadyCallback {
 
-    var map : GoogleMap? = null
+    var map: GoogleMap? = null
     val markerTripMap = mutableMapOf<Marker, Trip>()
 
     private lateinit var vibrator: Vibrator
@@ -51,28 +53,30 @@ class TripMapActivity : AppCompatActivity(), OnMapReadyCallback {
         }
         val mapFragment = supportFragmentManager.findFragmentById(R.id.maps) as SupportMapFragment
         mapFragment.getMapAsync(this)
-        getTrips()
     }
-    fun getTrips(){
-        val call : Call<List<Trip>> = RetrofitUtil.getApi().getTrips()
+
+    fun getTrips() {
+        val call: Call<List<Trip>> = RetrofitUtil.getApi().getTrips()
         call.enqueue(object : Callback<List<Trip>> {
-            override fun onResponse(
-                call: Call<List<Trip>>,
-                response: Response<List<Trip>>
-            ) {
+            override fun onResponse(call: Call<List<Trip>>, response: Response<List<Trip>>) {
                 val trips: List<Trip> = response.body() ?: emptyList()
                 trips.forEach { trip ->
                     val latLng = LatLng(trip.latitude, trip.longitude)
-                    val marker = map?.addMarker(MarkerOptions().position(latLng).title(trip.name).icon(
-                        BitmapDescriptorFactory.fromResource(R.drawable.cheems)))
+                    val marker = map?.addMarker(
+                        MarkerOptions()
+                            .position(latLng)
+                            .title(trip.name)
+                            .icon(BitmapDescriptorFactory.fromResource(R.drawable.cheems))
+                    )
                     marker?.let { markerTripMap[it] = trip }
                 }
             }
             override fun onFailure(call: Call<List<Trip>>, t: Throwable) {
-                Log.e("Error calling API ", t.message.toString())
+                Log.e("Error calling API", t.message.toString())
             }
         })
     }
+
     fun getWeather(lat: Double, lon: Double, markerTitle: String) {
         val call: Call<Weather> = RetrofitUtil.getApiWeather().getWeather(
             lat, lon,
@@ -105,9 +109,15 @@ class TripMapActivity : AppCompatActivity(), OnMapReadyCallback {
         })
     }
 
+    @RequiresPermission(Manifest.permission.VIBRATE)
     private fun vibrate(durationMs: Long) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            vibrator.vibrate(VibrationEffect.createOneShot(durationMs, VibrationEffect.DEFAULT_AMPLITUDE))
+            vibrator.vibrate(
+                VibrationEffect.createOneShot(
+                    durationMs,
+                    VibrationEffect.DEFAULT_AMPLITUDE
+                )
+            )
         } else {
             @Suppress("DEPRECATION")
             vibrator.vibrate(durationMs)
@@ -129,7 +139,7 @@ class TripMapActivity : AppCompatActivity(), OnMapReadyCallback {
                 true
             }
 
-            map!!.setOnInfoWindowClickListener { marker ->
+            map!!.setOnInfoWindowClickListener {  marker ->
                 vibrate(40)
                 val trip = markerTripMap[marker]
                 if (trip != null) {
@@ -148,8 +158,10 @@ class TripMapActivity : AppCompatActivity(), OnMapReadyCallback {
 
     override fun onResume() {
         super.onResume()
-        map?.clear()
-        markerTripMap.clear()
-        getTrips()
+        if (map != null) {
+            map?.clear()
+            markerTripMap.clear()
+            getTrips()
+        }
     }
 }
