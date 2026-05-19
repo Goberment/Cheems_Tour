@@ -21,10 +21,8 @@ import com.google.android.gms.maps.model.MarkerOptions
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import android.os.Build
-import android.os.VibrationEffect
-import android.os.Vibrator
-import android.os.VibratorManager
+
+
 
 class TripFormActivity : AppCompatActivity(), View.OnClickListener, OnMapReadyCallback {
 
@@ -35,7 +33,6 @@ class TripFormActivity : AppCompatActivity(), View.OnClickListener, OnMapReadyCa
     var latitude: Double = 0.0
     var longitude: Double = 0.0
 
-    private lateinit var vibrator: Vibrator
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -45,13 +42,6 @@ class TripFormActivity : AppCompatActivity(), View.OnClickListener, OnMapReadyCa
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
-        }
-        vibrator = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-            val vm = getSystemService(VIBRATOR_MANAGER_SERVICE) as VibratorManager
-            vm.defaultVibrator
-        } else {
-            @Suppress("DEPRECATION")
-            getSystemService(VIBRATOR_SERVICE) as Vibrator
         }
 
         name = findViewById(R.id.txt_name)
@@ -68,26 +58,6 @@ class TripFormActivity : AppCompatActivity(), View.OnClickListener, OnMapReadyCa
         mapFragment.getMapAsync(this)
     }
 
-    private fun vibrate(durationMs: Long) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            vibrator.vibrate(VibrationEffect.createOneShot(durationMs, VibrationEffect.DEFAULT_AMPLITUDE))
-        } else {
-            @Suppress("DEPRECATION")
-            vibrator.vibrate(durationMs)
-        }
-    }
-
-    private fun vibrateSuccess() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            val pattern = longArrayOf(0, 60, 80, 100)
-            val amplitudes = intArrayOf(0, 200, 0, 255)
-            vibrator.vibrate(VibrationEffect.createWaveform(pattern, amplitudes, -1))
-        } else {
-            @Suppress("DEPRECATION")
-            vibrator.vibrate(longArrayOf(0, 60, 80, 100), -1)
-        }
-    }
-
     override fun onClick(v: View?) {
         val tripName = name.text.toString()
         val tripCity = city.text.toString()
@@ -95,7 +65,6 @@ class TripFormActivity : AppCompatActivity(), View.OnClickListener, OnMapReadyCa
         Log.d("DEBUG", "name: $tripName, city: $tripCity, lat: $latitude, lon: $longitude")
 
         if (tripName.isEmpty() || tripCity.isEmpty()) {
-            vibrate(80) // campos vacíos
             return
         }
 
@@ -106,13 +75,11 @@ class TripFormActivity : AppCompatActivity(), View.OnClickListener, OnMapReadyCa
             override fun onResponse(call: Call<Void>, response: Response<Void>) {
                 Log.d("DEBUG", "code: ${response.code()}")
                 if (response.isSuccessful) {
-                    vibrateSuccess() // doble pulso = guardado
                     finish()
                 }
             }
             override fun onFailure(call: Call<Void>, t: Throwable) {
                 Log.e("Error", t.message.toString())
-                vibrate(300) // pulso largo = error
             }
         })
     }
