@@ -97,13 +97,22 @@ class TripMapActivity : AppCompatActivity(), OnMapReadyCallback {
             map = googleMap
             map!!.mapType = GoogleMap.MAP_TYPE_NORMAL
 
-            // Click en el icono cheems → pide el clima
             map!!.setOnMarkerClickListener { marker ->
                 val trip = markerTripMap[marker]
                 if (trip != null) {
                     getWeather(trip.latitude, trip.longitude, trip.name ?: "")
+                    marker.showInfoWindow()
                 }
                 true
+            }
+
+            map!!.setOnInfoWindowClickListener { marker ->
+                val trip = markerTripMap[marker]
+                if (trip != null) {
+                    val intent = Intent(this, TripFormActivity::class.java)
+                    intent.putExtra("trip", trip)
+                    startActivity(intent)
+                }
             }
 
             getTrips()
@@ -113,4 +122,10 @@ class TripMapActivity : AppCompatActivity(), OnMapReadyCallback {
         }
     }
 
+    override fun onResume() {
+        super.onResume()
+        map?.clear()
+        markerTripMap.clear()
+        getTrips()
+    }
 }
